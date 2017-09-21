@@ -6,7 +6,6 @@ from stem import Signal as TorSignal
 
 IP_CHECKER = 'http://icanhazip.com/'
 
-
 class TorTorO:
     def __init__(self, config):
         self.c = config
@@ -46,6 +45,14 @@ class TorTorO:
             new_ip = self.fake_ip
             if new_ip != cur_ip:
                 return new_ip
+
+    def download_file(self, url, fname):
+        proxy = self.c.LOCAL_HTTP_PROXY
+        resp = requests.get(url, stream=True, proxies={'http': proxy})
+        with open(fname, 'wb') as f:
+            for chunk in resp.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
 
 
 if __name__ == '__main__':
